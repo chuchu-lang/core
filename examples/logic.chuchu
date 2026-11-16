@@ -1,0 +1,26 @@
+function fail() be bool {
+    show 999
+    return true
+}
+assign age as 25
+assign member as true
+if age >= 18 and member {
+    show 1
+}
+if age < 18 or not member {
+    show 0
+} else {
+    show 2
+}
+if not (age == 25) {
+    show 0
+} else {
+    show 3
+}
+assign ok as false and fail()
+assign ok2 as true or fail()
+if not ok and ok2 or false {
+    show 4
+}
+show ok
+show true and false or true

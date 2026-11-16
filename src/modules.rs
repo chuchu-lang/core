@@ -534,7 +534,7 @@ impl Resolver<'_> {
                     self.expression(item, module)?;
                 }
             }
-            Error { code, .. } | Negate(code) | FieldAccess { target: code, .. } => {
+            Error { code, .. } | Negate(code) | Not(code) | FieldAccess { target: code, .. } => {
                 self.expression(code, module)?
             }
             Index { array, index } => {

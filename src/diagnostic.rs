@@ -470,6 +470,9 @@ fn parse_diagnostic(error: &ParseError, source: &str) -> Diagnostic {
                             | TokenKind::Minus
                             | TokenKind::Star
                             | TokenKind::Slash
+                            | TokenKind::And
+                            | TokenKind::Or
+                            | TokenKind::Not
                             | TokenKind::Equal
                             | TokenKind::NotEqual
                             | TokenKind::Less

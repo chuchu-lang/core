@@ -1,0 +1,42 @@
+use module account
+
+assign customer as account.create_account(1001, "Alice")
+
+show "=== Chuchu Bank ==="
+show "Account Holder: " + customer.holder_name
+show "Initial balance: " + to_string(customer.balance_cents)
+
+//Deposit 25000 cents
+assign deposit_amount as 25000
+
+if account.can_deposit(customer, deposit_amount) {
+    reassign customer as account.deposit(customer, deposit_amount)
+    show "Deposit Successful!"
+} else {
+    show "Deposit rejected!"
+}
+
+show "Balance: " + to_string(customer.balance_cents)
+
+assign withdraw_amount as 7000
+
+if account.can_withdraw(customer, withdraw_amount) {
+    reassign customer as account.withdraw(customer, withdraw_amount)
+    show "Withdraw Successful!"
+} else {
+    show "Withdraw Rejected!"
+}
+
+show "Balance: " + to_string(customer.balance_cents)
+
+
+assign invalid_amount as 50000
+//Testing withdraw with invalid amount
+if account.can_withdraw(customer, invalid_amount) {
+    reassign customer as account.withdraw(customer, withdraw_amount)
+    show "Withdrawal successful!"
+} else {
+    show "Insufficient funds or invalide amount!"
+}
+
+show "Final Balance: " + to_string(customer.balance_cents) 

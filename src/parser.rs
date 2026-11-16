@@ -585,16 +585,18 @@ impl Parser {
     fn operator(&self) -> Option<(BinaryOperator, u8)> {
         use BinaryOperator as B;
         Some(match self.current()?.kind {
-            TokenKind::Equal => (B::Equal, 1),
-            TokenKind::NotEqual => (B::NotEqual, 1),
-            TokenKind::Less => (B::Less, 1),
-            TokenKind::LessEqual => (B::LessEqual, 1),
-            TokenKind::Greater => (B::Greater, 1),
-            TokenKind::GreaterEqual => (B::GreaterEqual, 1),
-            TokenKind::Plus => (B::Add, 2),
-            TokenKind::Minus => (B::Subtract, 2),
-            TokenKind::Star => (B::Multiply, 3),
-            TokenKind::Slash => (B::Divide, 3),
+            TokenKind::Or => (B::Or, 1),
+            TokenKind::And => (B::And, 2),
+            TokenKind::Equal => (B::Equal, 3),
+            TokenKind::NotEqual => (B::NotEqual, 3),
+            TokenKind::Less => (B::Less, 3),
+            TokenKind::LessEqual => (B::LessEqual, 3),
+            TokenKind::Greater => (B::Greater, 3),
+            TokenKind::GreaterEqual => (B::GreaterEqual, 3),
+            TokenKind::Plus => (B::Add, 4),
+            TokenKind::Minus => (B::Subtract, 4),
+            TokenKind::Star => (B::Multiply, 5),
+            TokenKind::Slash => (B::Divide, 5),
             _ => return None,
         })
     }
@@ -710,8 +712,20 @@ impl Parser {
                     }
                 }
             }
+            TokenKind::Not => {
+                // `not` binds looser than comparisons: `not a < b` is `not (a < b)`.
+                let inner = self.binary(3)?;
+                let span = Span {
+                    start: token.span.start,
+                    end: inner.span.end,
+                };
+                return Ok(Expr {
+                    kind: ExprKind::Not(Box::new(inner)),
+                    span,
+                });
+            }
             TokenKind::Minus => {
-                let inner = self.binary(4)?;
+                let inner = self.binary(6)?;
                 let span = Span {
                     start: token.span.start,
                     end: inner.span.end,

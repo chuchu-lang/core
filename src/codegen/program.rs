@@ -669,6 +669,21 @@ impl<'ctx> Generator<'ctx> {
                     _ => Err(invalid("Negation requires a number", span)),
                 }
             }
+            ExprKind::Not(inner) => {
+                let value = self.expression(inner)?;
+                if value.ty != Type::Bool {
+                    return Err(invalid("'not' requires a Bool", span));
+                }
+                Ok(Value {
+                    raw: build(self.builder.build_not(value.int(span)?, "not"), span)?.into(),
+                    ty: Type::Bool,
+                })
+            }
+            ExprKind::Binary {
+                left,
+                operator: operator @ (Op::And | Op::Or),
+                right,
+            } => self.logical(*operator, left, right, span),
             ExprKind::Binary {
                 left,
                 operator,
@@ -715,6 +730,60 @@ impl<'ctx> Generator<'ctx> {
                 })
             }
         }
+    }
+    /// Short-circuiting `and` / `or`: the right operand only runs when the
+    /// left one does not already decide the result.
+    fn logical(
+        &mut self,
+        op: Op,
+        left: &Expr,
+        right: &Expr,
+        span: Span,
+    ) -> Result<Value<'ctx>, CodegenError> {
+        let left_value = self.expression(left)?;
+        if left_value.ty != Type::Bool {
+            return Err(invalid("Logical operands must be Bool", left.span));
+        }
+        let left_bit = left_value.int(span)?;
+        let function = self.function(span)?;
+        let left_block = self
+            .builder
+            .get_insert_block()
+            .ok_or(CodegenError::InvalidInsertionPoint { span })?;
+        let rhs_block = self.context.append_basic_block(function, "logic.rhs");
+        let end_block = self.context.append_basic_block(function, "logic.end");
+        let (on_true, on_false) = if op == Op::And {
+            (rhs_block, end_block)
+        } else {
+            (end_block, rhs_block)
+        };
+        build(
+            self.builder
+                .build_conditional_branch(left_bit, on_true, on_false),
+            span,
+        )?;
+        self.builder.position_at_end(rhs_block);
+        let right_value = self.expression(right)?;
+        if right_value.ty != Type::Bool {
+            return Err(invalid("Logical operands must be Bool", right.span));
+        }
+        let right_bit = right_value.int(span)?;
+        let right_end = self
+            .builder
+            .get_insert_block()
+            .ok_or(CodegenError::InvalidInsertionPoint { span })?;
+        build(self.builder.build_unconditional_branch(end_block), span)?;
+        self.builder.position_at_end(end_block);
+        let phi = build(
+            self.builder
+                .build_phi(self.context.bool_type(), "logic"),
+            span,
+        )?;
+        phi.add_incoming(&[(&left_bit, left_block), (&right_bit, right_end)]);
+        Ok(Value {
+            raw: phi.as_basic_value(),
+            ty: Type::Bool,
+        })
     }
     fn binary(
         &mut self,

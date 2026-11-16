@@ -23,6 +23,12 @@ pub enum TokenKind {
     Reassign,
     Return,
     Err,
+    /// Logical conjunction keyword: `and`.
+    And,
+    /// Logical disjunction keyword: `or`.
+    Or,
+    /// Logical negation keyword: `not`.
+    Not,
     /// Record type declaration keyword: `record`.
     Record,
     Module,

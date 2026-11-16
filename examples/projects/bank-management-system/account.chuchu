@@ -1,0 +1,55 @@
+module account
+
+//INFO: A chuchu record is statically typed, fixed-layout value type where fields are known at compile time and copied by value.
+export record Account {
+    id: int
+    holder_name: string
+    balance_cents: int
+}
+
+export function create_account(id: int, holder_name: string) be Account {
+    return Account {
+        id: id
+        holder_name: holder_name
+        balance_cents: 0
+    }
+}
+
+export function can_deposit(bank_account: Account, amount_cents: int) be bool {
+    if amount_cents <= 0 {
+        return false
+    }
+
+    if bank_account.balance_cents < 0 {
+        return false
+    }
+
+    return amount_cents <= 9223372036854775800 - bank_account.balance_cents
+}
+
+export function deposit(bank_account: Account, amount_cents: int) be Account {
+    if can_deposit(bank_account, amount_cents) {
+        reassign bank_account.balance_cents as bank_account.balance_cents + amount_cents
+    }
+
+    return bank_account
+}
+
+export function can_withdraw(bank_account: Account, amount_cents: int) be bool {
+    if amount_cents <= 0 {
+        return false
+    }
+
+    if amount_cents > bank_account.balance_cents {
+        return false
+    }
+
+    return true
+}
+
+export function withdraw(bank_account: Account, amount_cents: int) be Account {
+    if can_withdraw(bank_account, amount_cents) {
+        reassign bank_account.balance_cents as bank_account.balance_cents - amount_cents
+    }
+    return bank_account
+}

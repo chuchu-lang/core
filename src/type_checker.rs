@@ -991,6 +991,18 @@ impl TypeChecker {
                     })
                 }
             }
+            ExprKind::Not(inner) => {
+                let ty = self.infer_expression(inner)?;
+                if ty == Type::Bool {
+                    Ok(Type::Bool)
+                } else {
+                    Err(TypeError::InvalidOperands {
+                        left: ty,
+                        right: ty,
+                        span: expr.span,
+                    })
+                }
+            }
             ExprKind::Binary {
                 left,
                 operator,
@@ -998,6 +1010,16 @@ impl TypeChecker {
             } => {
                 let left = self.infer_expression(left)?;
                 let right = self.infer_expression(right)?;
+                if matches!(operator, BinaryOperator::And | BinaryOperator::Or) {
+                    if left == Type::Bool && right == Type::Bool {
+                        return Ok(Type::Bool);
+                    }
+                    return Err(TypeError::InvalidOperands {
+                        left,
+                        right,
+                        span: expr.span,
+                    });
+                }
                 if left == Type::String && right == Type::String {
                     match operator {
                         BinaryOperator::Add => return Ok(Type::String),

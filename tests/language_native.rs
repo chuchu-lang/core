@@ -320,3 +320,25 @@ fn declare_fixes_the_type_and_rejects_duplicates() {
     );
     rejects("declare x\ndeclare x", "Duplicate declaration");
 }
+
+#[test]
+fn logical_operators_and_precedence() {
+    succeeds(
+        "show true and false\nshow true or false\nshow not true\nshow true or false and false\nshow not 1 < 2\nshow not (1 > 2) and 3 == 3\nshow false == false and true",
+        "false\ntrue\nfalse\ntrue\nfalse\ntrue\ntrue\n",
+    );
+}
+#[test]
+fn logical_operators_short_circuit() {
+    succeeds(
+        "function loud() be bool {\n    show 99\n    return true\n}\nshow false and loud()\nshow true or loud()\nshow true and loud()\nassign x as 0\nshow x != 0 and 10 / x > 1",
+        "false\ntrue\n99\ntrue\nfalse\n",
+    );
+}
+#[test]
+fn logical_operators_require_bool() {
+    for source in ["show 1 and true", "show true or 1", "show not 1"] {
+        let case = Case::new();
+        assert!(!case.compile(source).status.success(), "{source}");
+    }
+}

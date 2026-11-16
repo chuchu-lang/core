@@ -18,6 +18,8 @@ pub enum ExprKind {
         code: Box<Expr>,
     },
     Negate(Box<Expr>),
+    /// Logical negation: `not value`.
+    Not(Box<Expr>),
     Call {
         name: String,
         arguments: Vec<Expr>,
@@ -64,6 +66,10 @@ pub enum BinaryOperator {
     LessEqual,
     Greater,
     GreaterEqual,
+    /// Short-circuiting logical conjunction: `and`.
+    And,
+    /// Short-circuiting logical disjunction: `or`.
+    Or,
 }
 
 impl BinaryOperator {
