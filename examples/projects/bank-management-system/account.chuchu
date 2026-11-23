@@ -16,11 +16,7 @@ export function create_account(id: int, holder_name: string) be Account {
 }
 
 export function can_deposit(bank_account: Account, amount_cents: int) be bool {
-    if amount_cents <= 0 {
-        return false
-    }
-
-    if bank_account.balance_cents < 0 {
+    if amount_cents <= 0 and bank_account.balance_cents < 0{
         return false
     }
 
@@ -36,11 +32,7 @@ export function deposit(bank_account: Account, amount_cents: int) be Account {
 }
 
 export function can_withdraw(bank_account: Account, amount_cents: int) be bool {
-    if amount_cents <= 0 {
-        return false
-    }
-
-    if amount_cents > bank_account.balance_cents {
+    if amount_cents <= 0 and amount_cents > bank_account.balance_cents {
         return false
     }
 
