@@ -23,7 +23,7 @@ def generate(directory, version, base_url, release_date):
         installers[platform] = dict(name=name, filename=path.name, **asset(path, base_url))
     return dict(schema_version=1, version=version, release_date=release_date,
                 installers=installers,
-                release_notes_url=f'https://github.com/chuchu-lang/chuchu-core/releases/tag/v{version}')
+                release_notes_url=f'https://github.com/chuchu-lang/core/releases/tag/v{version}')
 
 
 def validate_downloads(directory, version, base_url):

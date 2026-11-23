@@ -13,7 +13,7 @@ import urllib.request
 
 from release_artifacts import BASE_URL, validate_release, validate_tag
 
-REPOSITORY = 'chuchu-lang/chuchu-core'
+REPOSITORY = 'chuchu-lang/core'
 MARKER = '<!-- chuchu-s3-deployed:'
 
 

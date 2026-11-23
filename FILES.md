@@ -380,7 +380,7 @@ allocation failure while reading is a recoverable code 7, and that nothing
 fails under AddressSanitizer.
 
 The file suites pass in
-[hosted CI](https://github.com/chuchu-lang/chuchu-core/actions/runs/41520343694)
+[hosted CI](https://github.com/chuchu-lang/core/actions/runs/41520343694)
 on Linux x64, Windows x64 MSVC, macOS Intel and macOS ARM64. Tests that need
 Unix permissions, symbolic links, descriptor limits or standard input run on
 Linux and macOS only, two helper tests (a full device and `/proc`) run on Linux

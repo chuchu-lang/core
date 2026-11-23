@@ -24,7 +24,7 @@
     },
     "release_notes_url": {
       "type": "string",
-      "pattern": "^https://github\\.com/chuchu-lang/chuchu-core/releases/tag/v[^/]+$"
+      "pattern": "^https://github\\.com/chuchu-lang/core/releases/tag/v[^/]+$"
     },
     "installers": {
       "type": "object",

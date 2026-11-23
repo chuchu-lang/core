@@ -257,7 +257,7 @@ quick checks. See the [deployment guide](docs/aws-installer-releases.md) for set
 Archives require external toolchains/runtimes; see
 [release requirements](docs/release-runtime.md). [Contributing](CONTRIBUTING.md)
 describes the development workflow and required checks. All four targets pass
-[hosted native CI](https://github.com/chuchu-lang/chuchu-core/actions/runs/40815235497); no release has been published yet.
+[hosted native CI](https://github.com/chuchu-lang/core/actions/runs/40815235497); no release has been published yet.
 
 ## Optimization and performance
 

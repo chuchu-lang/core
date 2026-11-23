@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   validate-release:
-    if: github.repository == 'chuchu-lang/chuchu-core' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    if: github.repository == 'chuchu-lang/core' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     runs-on: ubuntu-latest
     outputs:
       commit: ${{ steps.validate.outputs.commit }}
@@ -146,5 +146,5 @@ jobs:
             echo "Update manifest: https://downloads.chuchu-lang.org/latest.json"
             echo "Manifest snapshot: https://downloads.chuchu-lang.org/cheeku-$RELEASE_VERSION.json"
             echo "Checksums: https://downloads.chuchu-lang.org/SHA256SUMS-$RELEASE_VERSION"
-            echo "GitHub Release: https://github.com/chuchu-lang/chuchu-core/releases/tag/$RELEASE_TAG"
+            echo "GitHub Release: https://github.com/chuchu-lang/core/releases/tag/$RELEASE_TAG"
           } >> "$GITHUB_STEP_SUMMARY"

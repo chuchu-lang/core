@@ -86,13 +86,13 @@ role using that federated provider and `sts:AssumeRoleWithWebIdentity`.
 Replace `ACCOUNT_ID` below with your actual AWS account ID, never a guessed ID.
 
 The repository currently reports these settings from the read-only endpoint
-`gh api repos/chuchu-lang/chuchu-core/actions/oidc/customization/sub`:
+`gh api repos/chuchu-lang/core/actions/oidc/customization/sub`:
 
 ```json
 {
   "use_default": true,
   "use_immutable_subject": true,
-  "sub_claim_prefix": "repo:chuchu-lang@349508701/chuchu-core@1435048838"
+  "sub_claim_prefix": "repo:chuchu-lang@349508701/core@1435048838"
 }
 ```
 
@@ -110,7 +110,7 @@ Use this **exact environment-bound** trust policy for the current settings:
     "Condition": {
       "StringEquals": {
         "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-        "token.actions.githubusercontent.com:sub": "repo:chuchu-lang@349508701/chuchu-core@1435048838:environment:production"
+        "token.actions.githubusercontent.com:sub": "repo:chuchu-lang@349508701/core@1435048838:environment:production"
       }
     }
   }]
@@ -119,7 +119,7 @@ Use this **exact environment-bound** trust policy for the current settings:
 
 Verify the subject settings again before configuring IAM. If the repository
 explicitly switches back to legacy subjects, the environment subject becomes
-`repo:chuchu-lang/chuchu-core:environment:production`; do not allow both forms
+`repo:chuchu-lang/core:environment:production`; do not allow both forms
 unless they are actually needed. A job with an environment has an
 `environment:production` subject suffix, **not** `ref:refs/tags/v...`.
 Enforce eligible refs with the production environment rules described above.
@@ -319,7 +319,7 @@ To roll back for new installations during an incident:
    permanent access keys. This is a manual exception to the publisher's downgrade
    protection, not a normal workflow dispatch.
 2. Download the old GitHub Release's complete artifacts into `rollback/` using
-   `gh release download v0.1.0 --repo chuchu-lang/chuchu-core --dir rollback`.
+   `gh release download v0.1.0 --repo chuchu-lang/core --dir rollback`.
    Verify with `python3 installer/publish_s3.py --directory rollback --version
    0.1.0 --validate-only` (on one line). Check the immutable files still exist in
    S3 with the correct checksum metadata, and that their public URLs respond.

@@ -14,8 +14,8 @@ for future builds.
 Clone the repository:
 
 ```sh
-git clone https://github.com/chuchu-lang/chuchu-core.git
-cd chuchu-core
+git clone https://github.com/chuchu-lang/core.git
+cd core
 ```
 
 Run the commands for your operating system from this directory.

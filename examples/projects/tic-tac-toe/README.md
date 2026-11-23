@@ -19,7 +19,7 @@ A complete, native console **Tic-Tac-Toe** game written **100% in Chuchu**, show
 
 ## Build & Run
 
-From the repository root (`chuchu-core`):
+From the repository root (`core`):
 
 ```bash
 # Compile to a native executable
